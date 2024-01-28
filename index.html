@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Animation</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            color: white;
+        }
+        #emoji-container {
+            font-size: 3em;
+            text-align: center;
+            font-family: "Noto Sans", Arial, sans-serif;
+        }
+        .orange {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <div id="emoji-container"></div>
+    <script>
+        const emojis = [
+            "¯\\_(ツ)_/¯", "( ͡° ͜ʖ ͡°)", "ಠ_ಠ", "ʕ•ᴥ•ʔ", "(╯°□°）╯︵ ┻━┻",
+            "༼ つ ◕_◕ ༽つ", "ヽ(´▽｀)ノ", "(^_^)/", "(✿◠‿◠)", "ʘ‿ʘ",
+            "(>_<)", "(ง ͠° ͟ل͜ ͡°)ง", "(づ｡◕‿‿◕｡)づ", "ლ(ಠ益ಠლ)", "(-_-)zzz",
+        ];
+
+        function animateEmojis(targetElement, emojis, durationPerEmoji, pauseDuration) {
+            let currentEmojiIndex = 0;
+
+            const changeEmoji = () => {
+                let content;
+                // Randomly display brand name
+                if (Math.random() < 0.2) {
+                    content = 'x^ponent'; // Just the text
+                } else {
+                    if (currentEmojiIndex >= emojis.length) {
+                        currentEmojiIndex = 0;
+                    }
+                    content = emojis[currentEmojiIndex];
+                    currentEmojiIndex++;
+                }
+                animateEmoji(targetElement, content, durationPerEmoji, () => {
+                    setTimeout(changeEmoji, pauseDuration);
+                });
+            };
+            changeEmoji();
+        }
+
+        function animateEmoji(targetElement, content, duration, callback) {
+            let currentStep = 0;
+            const intervalTime = 100;
+            let totalSteps = duration / intervalTime;
+            let currentString = new Array(content.length).fill(' ');
+
+            const interval = setInterval(() => {
+                let progression = (currentStep / totalSteps);
+
+                for (let i = 0; i < content.length; i++) {
+                    if (content === 'x^ponent' && i === 1) {
+                        // Special handling for '^' in brand name
+                        currentString[i] = progression < (i + 1) / content.length ?
+                            '<span class="orange">' + generateRandomASCIICharacter() + '</span>' :
+                            '<span class="orange">^</span>';
+                    } else {
+                        currentString[i] = progression < (i + 1) / content.length ?
+                            generateRandomASCIICharacter() :
+                            content[i];
+                    }
+                }
+
+                targetElement.innerHTML = content === 'x^ponent' ?
+                    currentString.join('') :
+                    currentString.join('').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, intervalTime);
+        }
+
+        function generateRandomASCIICharacter() {
+            const specialCharacters = ' !@#$%^&*()-_=+[]{}|;:",.<>?/`~';
+            return specialCharacters.charAt(Math.floor(Math.random() * specialCharacters.length));
+        }
+
+        const emojiContainer = document.getElementById('emoji-container');
+        animateEmojis(emojiContainer, emojis, 1000, 2000);
+    </script>
+</body>
+</html>
