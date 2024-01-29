@@ -9,6 +9,7 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background-color: black;
@@ -22,10 +23,19 @@
         .orange {
             color: orange;
         }
+        .early-access {
+            margin: 50px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
     <div id="emoji-container"></div>
+    <div class="early-access">
+        <button onclick="redirectToForm()">Apply for early access</button>
+    </div>
+
     <script>
         const emojis = [
             "¯\\_(ツ)_/¯", "( ͡° ͜ʖ ͡°)", "ಠ_ಠ", "ʕ•ᴥ•ʔ", "(╯°□°）╯︵ ┻━┻",
@@ -97,6 +107,11 @@
 
         const emojiContainer = document.getElementById('emoji-container');
         animateEmojis(emojiContainer, emojis, 1000, 2000);
+    </script>
+    <script>
+        function redirectToForm() {
+            window.location.href = 'https://forms.gle/oqPEEgHZqEzF9UaD9';
+        }
     </script>
 </body>
 </html>
